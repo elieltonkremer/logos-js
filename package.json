@@ -1,0 +1,12 @@
+{
+  "name": "logos",
+  "version": "1.0.0",
+  "description": "Simple and powerful dependency injection for node",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "argparse": "^2.0.1"
+  }
+}
