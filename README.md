@@ -37,3 +37,16 @@ module.exports = {
     })
 }
 ```
+
+Para usar basta buscar requisitar o servico pelo contexto
+
+```js
+const { ApplicationContext } = require("logos");
+
+let application = new ApplicationContext([
+  "logos/Command" // demais modulos
+])
+
+let command = application.get('app.command'); // retorna uma instancia de serviço command registrado no modulo
+command.execute()
+```
