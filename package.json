@@ -7,6 +7,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "argparse": "^2.0.1"
+    "argparse": "^2.0.1",
+    "weak-napi": "^2.0.2"
   }
 }

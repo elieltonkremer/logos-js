@@ -1,6 +1,7 @@
 const AbstractResource = require('./AbstractResource');
 const AbstractContainer = require("../AbstractContainer");
 
+
 class ParameterResource extends AbstractResource {
 
     constructor(value) {
@@ -23,11 +24,21 @@ class ParameterResource extends AbstractResource {
                 return ParameterResource.resolve_parameter(item, container);
             });
         }
+
+        if (value instanceof Object && value.constructor.name === 'Object') {
+            let new_obj = {};
+            for (const field of Object.keys(value)) {
+                new_obj[field] = ParameterResource.resolve_parameter(value[field], container)
+            }
+            return new_obj;
+        }
+
         if (typeof value === "string") {
             if (value.startsWith('%') && value.endsWith('%')) {
                 return ParameterResource.resolve_parameter(container.get(value.substring(1, value.length -1), container), container);
             }
         }
+
         return value;
     }
 }

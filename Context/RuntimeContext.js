@@ -7,31 +7,32 @@ class RuntimeContext extends AbstractContext {
     /**
      * @param {AbstractContainer} container
      * @param {{}} runtime
+     * @param {boolean} cache
      */
-    constructor(container, runtime = null) {
-        super();
-        this.container = container;
+    constructor(container, runtime = null, cache = false) {
+        super(container);
         this._runtime = runtime || {};
-        this._runtime['context'] = this;
         this._resource_names_cache = null;
+        this._cache = cache
     }
 
 
     get(name, container) {
+        if (name === 'context')
+            return container || this;
         if (this._runtime[name] === undefined) {
              let resource = this.container.get(name, container || this);
-             if (resource && resource.singleton === false) {
+             if (this._cache === false || resource && resource.singleton === false) {
                  return resource;
              } else {
                  this._runtime[name] = resource;
-
              }
         }
         return this._runtime[name];
     }
 
     has(name, container) {
-        return Object.keys(this._runtime).includes(name) || this.container.has(name, container || this);
+        return name === 'context' || Object.keys(this._runtime).includes(name) || this.container.has(name, container || this);
     }
 
     resource_names() {

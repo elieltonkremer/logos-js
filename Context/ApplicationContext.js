@@ -2,6 +2,7 @@ const AbstractContext = require('./AbstractContext');
 const Container = require('./Container');
 const AbstractContainer = require('./AbstractContainer');
 const ParameterResource = require('./Resource/ParameterResource');
+const ServiceResource = require('./Resource/ServiceResource');
 const StackContainer = require("./StackContainer");
 const {dirname, join} = require('path');
 
@@ -12,9 +13,8 @@ class ApplicationContext extends AbstractContext {
      * @param {Array<String>} modules
      */
     constructor(modules) {
-        super();
+        super(null);
         this._modules = modules;
-        this._container = null;
     }
 
     /**
@@ -38,6 +38,8 @@ class ApplicationContext extends AbstractContext {
             containers.push(new Container({
                 'app.configuration.modules': new ParameterResource(this._modules),
                 'app.configuration.root_dir': new ParameterResource(root_dir),
+                'app.context.service_factory': new ServiceResource('logos/Context/Factory/ServiceFactory', ['%context%']),
+                'app.context.singleton_factory': new ServiceResource('logos/Context/Factory/SingletonFactory', ['%context%', '%app.context.service_factory%']),
             }))
             let stack = new StackContainer(containers);
             for (const module_path of this._modules) {
@@ -58,18 +60,6 @@ class ApplicationContext extends AbstractContext {
             this._container = stack;
         }
         return this._container;
-    }
-
-    get(name, container) {
-        return this.container.get(name, container || this);
-    }
-
-    has(name, container) {
-        return this.container.has(name,container || this);
-    }
-
-    resource_names() {
-        return this.container.resource_names();
     }
 
 }
